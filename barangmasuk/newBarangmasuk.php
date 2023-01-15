@@ -193,7 +193,7 @@ $tanggal_masuk = date("Y-m-d");
 
                                         <div>
                                             <label for="total_hrg">Total Harga</label>
-                                            <input type="number" name="total_hrg" id="total_hrg"/>
+                                            <input type="number" name="total_hrg" id="total_hrg" readonly/>
                                         </div>
 
                                         <div>
@@ -226,10 +226,10 @@ $tanggal_masuk = date("Y-m-d");
         function sum() {
 	        var stok = document.getElementById('hg_beli').value;
 	        var jumlahmasuk = document.getElementById('jml_masuk').value;
-	        // var result = parseInt(stok) * parseInt(jumlahmasuk);
-	        // if (!isNaN(result)) {
-		    //     document.getElementById('total_hrg').value = result;
-	        // }
+	        var result = parseInt(stok) * parseInt(jumlahmasuk);
+	        if (!isNaN(result)) {
+		        document.getElementById('total_hrg').value = result;
+	        }
         }
 
         $('#cmb_barang').change(function(){

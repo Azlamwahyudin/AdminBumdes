@@ -19,29 +19,16 @@ if (isset($_GET['aksi'])) {
         exit();
     }
 }
-require '../koneksi.php';
+require('../koneksi.php');
 $sesName = $_SESSION['name'];
 
-$no = mysqli_query($koneksi, "select id_transaksi from data_klr order by id_transaksi desc");
-$idtran = mysqli_fetch_array($no);
-$kode = isset($idtran['id_transaksi']) ? $idtran['id_transaksi'] : '';
-// $kode = $idtran['id_transaksi'];
-
-
-$urut = substr($kode, 8, 3);
-$tambah = (int) $urut + 1;
-$bulan = date("m");
-$tahun = date("y");
-$day = date("d");
-
-if (strlen($tambah) == 1) {
-    $format = "TRK-" . $bulan . $tahun . "00" . $tambah;
-} else if (strlen($tambah) == 2) {
-    $format = "TRK-" . $bulan . $tahun . "0" . $tambah;
-} else {
-    $format = "TRK-" . $bulan . $tahun . $tambah;
-}
-$tanggal_keluar = date("Y-m-d");
+$id = $_GET['id'];
+// $query = "SELECT * from data_brg INNER JOIN data_msk ON data_brg.id_brg=data_msk.id_brg WHERE data_brg.id_brg='$id'";
+$query = "SELECT * from data_brg INNER JOIN data_klr ON data_brg.id_brg=data_klr.id_brg WHERE data_klr.id='$id'";
+// $query = "SELECT * from data_msk INNER JOIN data_brg ON data_brg.id_brg=data_msk.id_brg WHERE data_msk.id='$id'";
+// $query = "SELECT * from data_msk sb, data_brg st where st.id_brg=sb.id_brg order by sb.id='$id'";
+$result = mysqli_query($koneksi, $query);
+$data = mysqli_fetch_assoc($result);
 
 ?>
 
@@ -51,7 +38,7 @@ $tanggal_keluar = date("Y-m-d");
 
 <head>
     <meta charset="UTF-8">
-    <title> Transaksi Barang Keluar </title>
+    <title> Barang Masuk </title>
     <link rel="stylesheet" href="../style/style.css">
     <!-- Boxicons CDN Link -->
     <link href='https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css' rel='stylesheet'>
@@ -62,7 +49,7 @@ $tanggal_keluar = date("Y-m-d");
     <div class="sidebar">
         <div class="logo-details">
             <i class='bx bx-analyse'></i>
-            <span class="logo_name">BUMDES</span>
+            <span class="logo_name">Bumdes.KM</span>
         </div>
         <ul class="nav-links">
             <li>
@@ -90,7 +77,7 @@ $tanggal_keluar = date("Y-m-d");
                 </a>
             </li>
             <li>
-                <a href="../barangMasuk.php" class="">
+                <a href="../barangMasuk.php" class="activ">
                     <i class='bx bxs-cart-add'></i>
                     <span class="links_name">Transaksi Masuk</span>
                 </a>
@@ -120,7 +107,7 @@ $tanggal_keluar = date("Y-m-d");
                 </a>
             </li>
             <li class="log_out">
-                <a  href="../barangKeluar.php?aksi=logout" onclick="return confirm('Apakah anda akan keluar?')">
+                <a href="../barang.php?aksi=logout" onclick="return confirm('Apakah anda akan keluar?')">
                     <i class='bx bx-log-out'></i>
                     <span class="links_name">Log out</span>
                 </a>
@@ -131,7 +118,7 @@ $tanggal_keluar = date("Y-m-d");
         <nav>
             <div class="sidebar-button">
                 <i class='bx bx-menu sidebarBtn'></i>
-                <span class="dashboard">Barang Keluar</span>
+                <span class="dashboard">Barang Masuk</span>
             </div>
             <!-- <div class="search-box">
                 <input type="text" placeholder="Search...">
@@ -148,63 +135,58 @@ $tanggal_keluar = date("Y-m-d");
             <div class="sales-boxes">
                 <div class="recent-sales1 box">
                     <div class="card-header1">
-                        <h3>Recent Barang Keluar</h3>
+                        <h3>Recent Barang Masuk</h3>
                         <button>
-                            <a href="../barangKeluar.php" style="text-decoration: none;">Kembali</a>
+                            <a href="../barangMasuk.php" style="text-decoration: none;">Kembali</a>
                             <span class="bx bx-right-arrow-alt"></span>
                         </button>
                     </div>
                     <div class="tambah">
                         <center>
-                            <h1>Tambah Barang Keluar</h1>
-                            <center>
-                                <form method="POST" action="proses_tambah.php" enctype="multipart/form-data">
-                                    <section class="base">
-                                        <div>
-                                            <label for="id_transaksi">Id Transaksi Keluar</label>
-                                            <input type="text" name="id_transaksi" id="id_transaksi" value="<?php echo $format; ?>" readonly />
-                                        </div>
-                                        <div>
-                                            <label for="tgl_keluar">Tanggal Keluar</label>
-                                            <input type="date" name="tgl_keluar" id="tgl_keluar" value="<?php echo $tanggal_keluar; ?>" readonly/>
-                                        </div>
-                                        <div>
-                                            <label for="barang">Barang</label>
-                                            <select name="barang" class="custom-select form-control" id="cmb_barang" autofocus required>
-                                                <option selected>-- Pilih Barang --</option>
-                                                <?php
-                                                $det = mysqli_query($koneksi, "select * from data_brg order by id_brg ASC");
-                                                while ($d = mysqli_fetch_array($det)) {
-
-                                                    // echo "<option value='$d[id_brg].$d[barang]'>$d[id_brg] | $d[barang]</option>";
-                                                    echo "<option value='$d[id_brg].$d[barang]'>$d[id_brg] | $d[barang]</option>";
-                                                }
-                                                ?>
-                                            </select>
-                                        </div>
-                                        <div>
-                                            <label for="hrg_jual">Harga Jual</label>
-                                            <input type="number" name="hrg_jual" id="hrg_jual" />
-                                        </div>
-                                        <div>
-                                            <label for="jml_keluar">Jumlah</label>
-                                            <input type="number" onkeyup="sum()" name="jml_keluar" id="jml_keluar" autofocus required maxlength="4" />
-                                        </div>
-
-                                        <div>
-                                            <label for="total_hrg">Total Harga</label>
-                                            <input type="number" name="total_hrg" id="total_hrg" readonly/>
-                                        </div>
-
-                                        <div>
-                                            <label for="penerima">Penerima </label>
-                                            <input type="text" name="penerima" id="penerima">
-                                        </div>
-                                        <div>
-                                            <button type="submit" name="simpan">Simpan Product</button>
-                                        </div>
-                                    </section>
-                                </form>
+                            <h1>Edit Product</h1>
+                        <center>
+                        <form method="POST" action="proses_edit.php">
+                            <section class="base">
+                                <!-- menampung nilai id produk yang akan di edit -->
+                                <input type="hidden" name="id" value="<?php echo $data['id'] ?>">
+                                <input type="hidden" name="id_brg" value="<?php echo $data['id_brg'] ?>">
+                                <div>
+                                    <label for="id_transaksi">ID Transaksi</label>
+                                    <input type="text" name="id_transaksi" id="id_transaksi" value="<?php echo $data['id_transaksi'] ?>" disabled="" />
+                                </div>
+                                <div>
+                                    <label for="tgl_msk">Tanggal Masuk</label>
+                                    <input type="date" name="tgl_msk" id="tgl_msk" value="<?php echo $data['tgl_keluar'] ?>" disabled="" />
+                                </div>
+                                <div>
+                                    <label for="id_brg">Kode Barang</label>
+                                    <input type="text" name="id_brg" id="id_brg" value="<?php echo $data['id_brg'] ?>" disabled="" />
+                                </div>
+                                <div>
+                                    <label for="barang">Barang</label>
+                                    <input type="text" name="barang" id="barang" value="<?php echo $data['barang'] ?>" disabled="" />
+                                </div>
+                                <div>
+                                    <label for="penerima">Pengirim</label>
+                                    <input type="text" name="penerima" id="penerima" value="<?php echo $data['penerima'] ?>" disabled="" />
+                                </div>
+                                <div>
+                                    <label for="hrg_jual">Harga Jual</label>
+                                    <input type="number" name="hrg_jual" id="hrg_jual" value="<?php echo $data['hrg_jual'] ?>"/>
+                                </div>
+                                <div>
+                                    <label for="jml_keluar">Jumlah</label>
+                                    <input type="number" name="jml_keluar" onkeyup="sum()" id="jml_keluar" value="<?php echo $data['jml_keluar'] ?>" autofocus required maxlength="4" />
+                                </div>
+                                <div>
+                                    <label for="total_hrg">Total Harga</label>
+                                    <input type="number" name="total_hrg" id="total_hrg" value="<?php echo $data['total_hrg'] ?>" readonly />
+                                </div>
+                                <div>
+                                    <button type="submit" name="update">Simpan Perubahan</button>
+                                </div>
+                            </section>
+                        </form>
                     </div>
                 </div>
             </div>
@@ -221,18 +203,9 @@ $tanggal_keluar = date("Y-m-d");
 		        document.getElementById('total_hrg').value = result;
 	        }
         }
-
-        $('#cmb_barang').change(function(){
-            var selected_id = $(this).val();
-            // var data = {id: selected_id};
-            // $.post('get_data_brg.php', data, function(data){
-            //     $('#hrg_jual').val(data);
-            // })
-        });
     </script>
 
     <script>
-
         let sidebar = document.querySelector(".sidebar");
         let sidebarBtn = document.querySelector(".sidebarBtn");
         sidebarBtn.onclick = function() {
@@ -247,3 +220,4 @@ $tanggal_keluar = date("Y-m-d");
 </body>
 
 </html>
+

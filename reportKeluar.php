@@ -43,7 +43,7 @@ $sesName = $_SESSION['name'];
 <body>
     <div class="sidebar">
         <div class="logo-details">
-            <i class='bx bx-analyse'></i>
+            <img src="assets/img/bumdeslogo.png" alt="bumdes" width="40" >
             <span class="logo_name">BUMDES</span>
         </div>
         <ul class="nav-links">
@@ -157,10 +157,10 @@ $sesName = $_SESSION['name'];
                                         <th>No</th>
                                         <th>ID Transaksi</th>
                                         <th>Tanggal Transaksi</th>
+                                        <th>Barang</th>
                                         <th>Penerima</th>
-                                        <th>Alamat</th>
+                                        <th>Jumlah</th>
                                         <th>Total Transaksi</th>
-                                        <th>Status</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -187,10 +187,10 @@ $sesName = $_SESSION['name'];
                                             <td><?php echo $d["id_transaksi"]; ?></td>
                                             <td><?php $tanggals = $d['tgl_transaksi'];
                                                 echo date("d-M-Y", strtotime($tanggals)) ?></td>
+                                            <td><?php echo $d["barang"];   ?></td>
                                             <td><?php echo $d["penerima"];   ?></td>
-                                            <td><?php echo $d["alamat"];   ?></td>
+                                            <td><?php echo $d["jml_keluar"];   ?></td>
                                             <td><?php echo number_format($d["total_transaksi"],0,',','.');   ?></td>
-                                            <td><?php echo $d["status"];   ?></td>
                                         </tr>
                                     <?php
                                     }

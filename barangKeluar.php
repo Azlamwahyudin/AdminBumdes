@@ -41,7 +41,7 @@ $sesName = $_SESSION['name'];
 <body>
     <div class="sidebar">
         <div class="logo-details">
-            <i class='bx bx-analyse'></i>
+            <img src="assets/img/bumdeslogo.png" alt="bumdes" width="40" >
             <span class="logo_name">BUMDES</span>
         </div>
         <ul class="nav-links">
@@ -138,13 +138,14 @@ $sesName = $_SESSION['name'];
                                         <th>Tanggal</th>
                                         <th>Penerima</th>
                                         <th>Barang</th>
-                                        <th>Total keluar</th>
+                                        <th>Jumlah</th>
+                                        <th>Total Harga</th>
                                         <th>Action</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <?php
-                                    $brg = mysqli_query($koneksi, "SELECT * FROM report_klr");
+                                    $brg = mysqli_query($koneksi, "SELECT * FROM data_klr");
                                     $no = 1;
                                     while ($b = mysqli_fetch_array($brg)) {
                                         // $idb = $b['id_transaksi'];
@@ -153,14 +154,15 @@ $sesName = $_SESSION['name'];
                                         <tr>
                                             <td align="center"><?php echo $no; ?></td>
                                             <td><?php echo $b['id_transaksi'] ?></td>
-                                            <td><?php $tanggals = $b['tgl_transaksi'];
+                                            <td><?php $tanggals = $b['tgl_keluar'];
                                                 echo date("d-M-Y", strtotime($tanggals)) ?></td>
                                             <td><?php echo $b['penerima'] ?></td>
                                             <td><?php echo $b['barang'] ?></td>
-                                            <td><?php echo $b['total_keluar'] ?> barang </td>
+                                            <td><?php echo $b['jml_keluar'] ?> </td>
+                                            <td><?php echo $b['total_hrg'] ?></td>
                                             <td>
-                                                <a href="transaksi/editBarangkeluar.php?id_transaksi=<?php echo $b['id_transaksi'] ?>" class="btn-edit"><i class='bx bxs-show'></i></a>
-                                                <a href="transaksi/pindahData.php?id_transaksi=<?php echo $b['id_transaksi'] ?>" class="btn-selesai" onclick="return confirm('Apakah anda yakin ingin menyelesaikan transaksi keluar ini? *Data akan dipindahkan ke laporan keluar')"><i class='bx bx-check-circle'></i></a>
+                                                <a href="barangKeluar/editBarangkeluar.php?id=<?php echo $b['id'] ?>" class="btn-edit"><i class='bx bxs-show'></i></a>
+                                                <a href="barangKeluar/pindah_Data.php?id=<?php echo $b['id'] ?>" class="btn-selesai" onclick="return confirm('Apakah anda yakin ingin menyelesaikan transaksi keluar ini? *Data akan dipindahkan ke laporan keluar')"><i class='bx bx-check-circle'></i></a>
                                             </td>
                                         </tr>
                                     <?php
