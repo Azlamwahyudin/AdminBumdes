@@ -19,7 +19,7 @@ if ($barang === "-- Pilih Barang --") {
 
 $dt = mysqli_query($koneksi, "select * from data_brg where id_brg='$kode_barang'");
 $data = mysqli_fetch_array($dt);
-$sisa = $data['jml_stok'] + $jml_keluar;
+$sisa = $data['jml_stok'] - $jml_keluar;
 $query1 = mysqli_query($koneksi, "update data_brg set jml_stok='$sisa' where id_brg='$kode_barang'");
 
 $query2 = mysqli_query($koneksi, "INSERT INTO data_klr (id_transaksi,tgl_keluar,id_brg,barang,penerima,jml_keluar,hrg_jual, total_hrg) 
