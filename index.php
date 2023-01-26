@@ -56,8 +56,7 @@ $resultReseller = mysqli_query($koneksi, $queryReseller);
     <nav class="navbar navbar-expand-lg navbar-light bg-white sticky-top">
         <div class="container">
             <a class="navbar-brand" href="index.php">Mekar Jaya<span class="dot"></span></a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
-                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
@@ -66,7 +65,17 @@ $resultReseller = mysqli_query($koneksi, $queryReseller);
                         <a class="nav-link" href="#home">Home</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#about">About</a>
+                        <div class="d-flex">
+                            <div class="dropdown me-1">
+                                <button type="button" class="btn btn-secondary dropdown-toggle" id="dropdownMenuOffset" data-bs-toggle="dropdown" aria-expanded="false" data-bs-offset="10,20">
+                                    About
+                                </button>
+                                <ul class="dropdown-menu" aria-labelledby="dropdownMenuOffset">
+                                    <li><a class="dropdown-item" href="#">satu</a></li>
+                                    <li><a class="dropdown-item" href="#">dua</a></li>
+                                    <li><a class="dropdown-item" href="#">tiga</a></li>
+                                </ul>
+                            </div>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="#team">Team</a>
@@ -257,8 +266,8 @@ $resultReseller = mysqli_query($koneksi, $queryReseller);
                 <div class="overlay"></div>
                 <img src="images/barang/<?= $produk['gambar']; ?>" alt="">
                 <div class="content">
-                    <h2><?= $produk['barang']?></h2>
-                    <h6><?= $produk['deskripsi']?></h6>
+                    <h2><?= $produk['barang'] ?></h2>
+                    <h6><?= $produk['deskripsi'] ?></h6>
                 </div>
             </div>
             <div class="project">
@@ -368,24 +377,25 @@ $resultReseller = mysqli_query($koneksi, $queryReseller);
 
         <div class="owl-theme owl-carousel reviews-slider container">
             <?php
-        while ($rowRes = mysqli_fetch_assoc($resultReseller)) {
+            while ($rowRes = mysqli_fetch_assoc($resultReseller)) {
             ?>
-            <div class="review">
-                <div class="person">
-                    <img src="images/undraw_profile_pic_ic-5-t.svg" alt="">
-                    <h5><?=$rowRes['nama_reseller']?></h5>
-                    <small><?=$rowRes['alamat']?></small>
+                <div class="review">
+                    <div class="person">
+                        <img src="images/undraw_profile_pic_ic-5-t.svg" alt="">
+                        <h5><?= $rowRes['nama_reseller'] ?></h5>
+                        <small><?= $rowRes['alamat'] ?></small>
+                    </div>
+                    <h3>Halo Nama Saya <?= $rowRes['nama_reseller'] ?>, saya berasal dari <?= $rowRes['alamat'] ?>. saya bergabung dengan desa labuhan aji pada tanggal <?php $tanggals = $rowRes['tgl_gabung'];
+                                                                                                                                                                        echo date("d M Y", strtotime($tanggals)) ?></h3>
+                    <div class="stars">
+                        <i class='bx bxs-star'></i>
+                        <i class='bx bxs-star'></i>
+                        <i class='bx bxs-star'></i>
+                        <i class='bx bxs-star'></i>
+                        <i class="bx bxs-star-half"></i>
+                    </div>
+                    <i class='bx bxs-quote-alt-left'></i>
                 </div>
-                <h3>Halo Nama Saya <?=$rowRes['nama_reseller']?>, saya berasal dari <?=$rowRes['alamat']?>. saya bergabung dengan desa labuhan aji pada tanggal <?php $tanggals = $rowRes['tgl_gabung'];echo date("d M Y", strtotime($tanggals)) ?></h3>
-                <div class="stars">
-                    <i class='bx bxs-star'></i>
-                    <i class='bx bxs-star'></i>
-                    <i class='bx bxs-star'></i>
-                    <i class='bx bxs-star'></i>
-                    <i class="bx bxs-star-half"></i>
-                </div>
-                <i class='bx bxs-quote-alt-left'></i>
-            </div>
             <?php } ?>
         </div>
     </section>
@@ -398,26 +408,26 @@ $resultReseller = mysqli_query($koneksi, $queryReseller);
                         <h6>Produk</h6>
                         <h1>PRODUK DESA</h1>
                         <p class="mx-auto">Nikmati Berbelanja Murah Bersama Kami, di jamin Keutuhan Barang saat sampai ketempat anda
-                             dan keaslian barang yang Anda pesan di jamin memuaskan anda</p>
+                            dan keaslian barang yang Anda pesan di jamin memuaskan anda</p>
                     </div>
                 </div>
             </div>
             <div class="row">
-            <?php
-            while ($row = mysqli_fetch_assoc($result)) {
-            ?>
-                <div class="col-md-4">
-                    <article class="blog-post">
-                        <img src="images/barang/<?= $row['gambar'] ?>" alt="" class="img-fluid">
-                        <a href="#" class="tag">Rp. <?= $row['hg_jual']?></a>
-                        <div class="content">
-                            <small><?= $row['tgl_masuk']?></small>
-                            <h5><?=$row['barang']?></h5>
-                            <p><?= $row['deskripsi']?></p>
-                        </div>
-                    </article>
-                </div>
-                <?php } ?> 
+                <?php
+                while ($row = mysqli_fetch_assoc($result)) {
+                ?>
+                    <div class="col-md-4">
+                        <article class="blog-post">
+                            <img src="images/barang/<?= $row['gambar'] ?>" alt="" class="img-fluid">
+                            <a href="#" class="tag">Rp. <?= $row['hg_jual'] ?></a>
+                            <div class="content">
+                                <small><?= $row['tgl_masuk'] ?></small>
+                                <h5><?= $row['barang'] ?></h5>
+                                <p><?= $row['deskripsi'] ?></p>
+                            </div>
+                        </article>
+                    </div>
+                <?php } ?>
                 <!-- <div class="col-md-4">
                     <article class="blog-post">
                         <img src="img/project4.jpg" alt="">
@@ -458,13 +468,13 @@ $resultReseller = mysqli_query($koneksi, $queryReseller);
                             <a href="#"><i class='bx bxl-twitter'></i></a>
                             <a href="https://instagram.com/azlam_wahyudin" target="_blank"><i class='bx bxl-instagram'></i></a>
                             <a href="#"><i class='bx bxl-pinterest'></i></a>
-                        </div>          
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
         <div class="footer-bottom text-center">
-        <p> <i class='bx bxs-phone-call'></i>085237232541</p>
+            <p> <i class='bx bxs-phone-call'></i>085237232541</p>
         </div>
     </footer>
 
@@ -476,36 +486,32 @@ $resultReseller = mysqli_query($koneksi, $queryReseller);
                 <div class="modal-body p-0">
                     <div class="container-fluid">
                         <div class="row gy-4">
-                            <div class="col-lg-4 col-sm-12 bg-cover"
-                                style="background-image: url(img/c2.jpg); min-height:300px;">
+                            <div class="col-lg-4 col-sm-12 bg-cover" style="background-image: url(img/c2.jpg); min-height:300px;">
                                 <div>
-                                    
+
                                 </div>
                             </div>
                             <div class="col-lg-8">
                                 <form class="p-lg-5 col-12 row g-3">
                                     <div>
                                         <h1>Get in touch</h1>
-                                    <p>Fell free to contact us and we will get back to you as soon as possible</p>
+                                        <p>Fell free to contact us and we will get back to you as soon as possible</p>
                                     </div>
                                     <div class="col-lg-6">
                                         <label for="userName" class="form-label">First name</label>
-                                        <input type="text" class="form-control" placeholder="Jon" id="userName"
-                                            aria-describedby="emailHelp">
+                                        <input type="text" class="form-control" placeholder="Jon" id="userName" aria-describedby="emailHelp">
                                     </div>
                                     <div class="col-lg-6">
                                         <label for="userName" class="form-label">Last name</label>
-                                        <input type="text" class="form-control" placeholder="Doe" id="userName"
-                                            aria-describedby="emailHelp">
+                                        <input type="text" class="form-control" placeholder="Doe" id="userName" aria-describedby="emailHelp">
                                     </div>
                                     <div class="col-12">
                                         <label for="userName" class="form-label">Email address</label>
-                                        <input type="email" class="form-control" placeholder="Johndoe@example.com" id="userName"
-                                            aria-describedby="emailHelp">
+                                        <input type="email" class="form-control" placeholder="Johndoe@example.com" id="userName" aria-describedby="emailHelp">
                                     </div>
                                     <div class="col-12">
                                         <label for="exampleInputEmail1" class="form-label">Enter Message</label>
-                                        <textarea name="" placeholder="This is looking great and nice." class="form-control" id=""  rows="4"></textarea>
+                                        <textarea name="" placeholder="This is looking great and nice." class="form-control" id="" rows="4"></textarea>
                                     </div>
 
                                     <div class="col-12">
