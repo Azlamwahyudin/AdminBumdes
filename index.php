@@ -28,7 +28,7 @@ $resultReseller = mysqli_query($koneksi, $queryReseller);
     <link href='https://unpkg.com/boxicons@2.1.1/css/boxicons.min.css' rel='stylesheet'>
     <link rel="stylesheet" href="css/style.css">
 
-    <title>Welcome | Moyo Island</title>
+    <title>Welcome | Labuhan Aji</title>
 </head>
 
 <body data-bs-spy="scroll" data-bs-target=".navbar" data-bs-offset="70">
@@ -55,7 +55,7 @@ $resultReseller = mysqli_query($koneksi, $queryReseller);
     <!-- BOTTOM NAV -->
     <nav class="navbar navbar-expand-lg navbar-light bg-white sticky-top">
         <div class="container">
-            <a class="navbar-brand" href="#">MoyoIsland<span class="dot"></span></a>
+            <a class="navbar-brand" href="index.php">Mekar Jaya<span class="dot"></span></a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
                 aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
@@ -68,12 +68,6 @@ $resultReseller = mysqli_query($koneksi, $queryReseller);
                     <li class="nav-item">
                         <a class="nav-link" href="#about">About</a>
                     </li>
-                    <!-- <li class="nav-item">
-                        <a class="nav-link" href="#services">Services</a>
-                    </li> -->
-                    <!-- <li class="nav-item">
-                        <a class="nav-link" href="#portfolio">Portfolio</a>
-                    </li> -->
                     <li class="nav-item">
                         <a class="nav-link" href="#team">Team</a>
                     </li>
@@ -150,7 +144,7 @@ $resultReseller = mysqli_query($koneksi, $queryReseller);
                     </div>
                 </div>
                 <div class="col-lg-5">
-                    <img src="img/petamoyo.png" alt="">
+                    <img src="img/petalabuhanaji.jpg" alt="">
                 </div>
             </div>
         </div>
@@ -329,7 +323,7 @@ $resultReseller = mysqli_query($koneksi, $queryReseller);
                         </div>
 
                         <h5>Azlam Wahyudin</h5>
-                        <p>Frontend Developer</p>
+                        <p>Fro99ntend Developer</p>
                     </div>
                 </div>
                 <div class="col-lg-4 col-md-8">
