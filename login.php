@@ -1,7 +1,7 @@
 <?php
 session_start();
 if (isset($_SESSION['LOGIN'])) {
-	header("location: index.php");
+	header("location: index2.php");
 	exit();
 }
 require('koneksi.php');
@@ -25,7 +25,7 @@ if (isset($_POST['login'])) {
 				$_SESSION['LOGIN'] = 1;
 				session_start();
 				$_SESSION['name'] = $userName;
-				header('Location: index.php?user_fullname=' . urlencode($userName));
+				header('Location: index2.php?user_fullname=' . urlencode($userName));
 			} else {
 				$error = 'username atau password salah!';
 				header('Location: login.php');
@@ -62,7 +62,7 @@ if (isset($_POST['login'])) {
 		<div class="login-content">
 			<form action="" method="POST">
 				<img src="images/undraw_profile_pic_ic-5-t.svg">
-				<h2 class="title">Welcome</h2>
+				<h2 class="title">Bumdes Moyo</h2>
 				<div class="input-div one">
 					<div class="i">
 						<i class="fas fa-user"></i>

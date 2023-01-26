@@ -48,8 +48,8 @@ $data = mysqli_fetch_assoc($result);
 <body>
     <div class="sidebar">
         <div class="logo-details">
-            <i class='bx bx-analyse'></i>
-            <span class="logo_name">Bumdes.KM</span>
+        <img src="../assets/img/bumdeslogo.png" alt="bumdes" width="40" >
+            <span class="logo_name">BUMDES</span>
         </div>
         <ul class="nav-links">
             <li>
@@ -164,7 +164,7 @@ $data = mysqli_fetch_assoc($result);
                                 </div>
                                 <div>
                                     <label for="barang">Barang</label>
-                                    <input type="text" name="barang" id="barang" value="<?php echo $data['barang'] ?>" disabled="" />
+                                    <input type="text" name="barang" id="barang" value="<?php echo $data['barang'] ?>" readonly />
                                 </div>
                                 <div>
                                     <label for="pengirim">Pengirim</label>
@@ -172,7 +172,7 @@ $data = mysqli_fetch_assoc($result);
                                 </div>
                                 <div>
                                     <label for="hg_beli">Harga Beli</label>
-                                    <input type="number" name="hg_beli" id="hg_beli" value="<?php echo $data['hg_beli'] ?>" disabled />
+                                    <input type="number" name="hg_beli" id="hg_beli" value="<?php echo $data['hg_beli'] ?>" readonly />
                                 </div>
                                 <div>
                                     <label for="jml_masuk">Jumlah</label>

@@ -38,7 +38,7 @@ $data = mysqli_fetch_assoc($result);
 
 <head>
     <meta charset="UTF-8">
-    <title> Barang Masuk </title>
+    <title> Barang Keluar </title>
     <link rel="stylesheet" href="../style/style.css">
     <!-- Boxicons CDN Link -->
     <link href='https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css' rel='stylesheet'>
@@ -48,8 +48,8 @@ $data = mysqli_fetch_assoc($result);
 <body>
     <div class="sidebar">
         <div class="logo-details">
-            <i class='bx bx-analyse'></i>
-            <span class="logo_name">Bumdes.KM</span>
+        <img src="../assets/img/bumdeslogo.png" alt="bumdes" width="40" >
+            <span class="logo_name">BUMDES</span>
         </div>
         <ul class="nav-links">
             <li>
@@ -118,7 +118,7 @@ $data = mysqli_fetch_assoc($result);
         <nav>
             <div class="sidebar-button">
                 <i class='bx bx-menu sidebarBtn'></i>
-                <span class="dashboard">Barang Masuk</span>
+                <span class="dashboard">Barang Keluar</span>
             </div>
             <!-- <div class="search-box">
                 <input type="text" placeholder="Search...">
@@ -135,7 +135,7 @@ $data = mysqli_fetch_assoc($result);
             <div class="sales-boxes">
                 <div class="recent-sales1 box">
                     <div class="card-header1">
-                        <h3>Recent Barang Masuk</h3>
+                        <h3>Recent Barang Keluar</h3>
                         <button>
                             <a href="../barangMasuk.php" style="text-decoration: none;">Kembali</a>
                             <span class="bx bx-right-arrow-alt"></span>

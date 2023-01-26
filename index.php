@@ -1,297 +1,544 @@
 <?php
-session_start();
-if (!isset($_SESSION['LOGIN'])) {
-  header("location: login.php");
-  exit();
-}
-if (isset($_GET['aksi'])) {
-  $aksi = $_GET['aksi'];
+require 'koneksi.php';
 
-  if ($aksi == "logout") {
-    if (isset($_SESSION['LOGIN'])) {
-      unset($_SESSION['LOGIN']);
-      session_unset();
-      session_destroy();
-      $_SESSION = array();
-    }
-    header("location: login.php");
-    exit();
-  }
-}
-require('koneksi.php');
-$sesName = $_SESSION['name'];
+// tampil data barang
+$query = "SELECT * FROM data_brg ORDER BY id_brg ASC";
+$result = mysqli_query($koneksi, $query);
 
-$data_barang = mysqli_query($koneksi, "SELECT * FROM data_brg");
-$data_mitra = mysqli_query($koneksi, "SELECT * FROM data_mitra");
-$data_reseller = mysqli_query($koneksi, "SELECT * FROM data_reseller");
-$transaksi = mysqli_query($koneksi, "SELECT * FROM transaksi");
+// tampil data reseller
+$queryReseller = "SELECT * FROM data_reseller ORDER BY id ASC";
+$resultReseller = mysqli_query($koneksi, $queryReseller);
 
-$jml_barang = mysqli_num_rows($data_barang);
-$jml_mitra = mysqli_num_rows($data_mitra);
-$jml_reseller = mysqli_num_rows($data_reseller);
-$jml_transaksi = mysqli_num_rows($transaksi);
 
-$bulanini = date("Y-m");
-$getUntung = mysqli_query($koneksi, "SELECT * FROM transaksi WHERE tgl_transaksi LIKE '%$bulanini%' AND status = 'Selesai'");
-$untung = 0;
-while ($hitungUntung = mysqli_fetch_assoc($getUntung)) {
-  $untung += $hitungUntung['untung'];
-}
 
 ?>
 
-
-<!DOCTYPE html>
-<html lang="en" dir="ltr">
+<!doctype html>
+<html lang="en">
 
 <head>
-  <meta charset="UTF-8">
-  <title> Dashboard Bumdes </title>
-  <link rel="stylesheet" href="style/style.css">
-  <!-- Boxicons CDN Link -->
-  <link href='https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css' rel='stylesheet'>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/owl.carousel.min.css">
+    <link rel="stylesheet" href="css/owl.theme.default.min.css">
+    <link href='https://unpkg.com/boxicons@2.1.1/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="stylesheet" href="css/style.css">
+
+    <title>Welcome | Moyo Island</title>
 </head>
 
-<body>
-  <div class="sidebar">
-    <div class="logo-details">
-      <img src="assets/img/bumdeslogo.png" alt="bumdes" width="40" >
-      <span class="logo_name">BUMDES</span>
+<body data-bs-spy="scroll" data-bs-target=".navbar" data-bs-offset="70">
+
+
+    <!-- TOP NAV -->
+    <div class="top-nav" id="home">
+        <div class="container">
+            <div class="row justify-content-between">
+                <div class="col-auto">
+                    <p> <i class='bx bxs-envelope'></i> azlamwahyudin5@gmail.com</p>
+                    <p> <i class='bx bxs-phone-call'></i>085237232541</p>
+                </div>
+                <div class="col-auto social-icons">
+                    <a href="#"><i class='bx bxl-facebook'></i></a>
+                    <a href="#"><i class='bx bxl-twitter'></i></a>
+                    <a href="#"><i class='bx bxl-instagram'></i></a>
+                    <a href="#"><i class='bx bxl-pinterest'></i></a>
+                </div>
+            </div>
+        </div>
     </div>
-    <ul class="nav-links">
-      <li>
-        <a href="index.php" class="active">
-          <i class='bx bx-grid-alt'></i>
-          <span class="links_name">Dashboard</span>
-        </a>
-      </li>
-      <li>
-        <a href="barang.php" class="">
-          <i class='bx bx-box'></i>
-          <span class="links_name">Product</span>
-        </a>
-      </li>
-      <li>
-        <a href="mitra.php" class="">
-          <i class='bx bx-badge-check'></i>
-          <span class="links_name">Mitra</span>
-        </a>
-      </li>
-      <li>
-        <a href="reseller.php" class="">
-          <i class='bx bxs-collection'></i>
-          <span class="links_name">Reseller</span>
-        </a>
-      </li>
-      <li>
-        <a href="barangMasuk.php">
-          <i class='bx bxs-cart-add'></i>
-          <span class="links_name">Transaksi Masuk</span>
-        </a>
-      </li>
-      <li>
-        <a href="barangKeluar.php" class="">
-          <i class='bx bxs-cart-download'></i>
-          <span class="links_name">Transaksi Keluar</span>
-        </a>
-      </li>
-      <li>
-        <a href="preOrder.php" class="">
-          <i class='bx bxs-basket'></i>
-          <span class="links_name">Pre Order</span>
-        </a>
-      </li>
-      <li>
-        <a href="reportMasuk.php" class="">
-          <i class='bx bxs-archive-in'></i>
-          <span class="links_name">Laporan Masuk</span>
-        </a>
-      </li>
-      <li>
-        <a href="reportKeluar.php" class="">
-          <i class='bx bxs-archive-out'></i>
-          <span class="links_name">Laporan Keluar</span>
-        </a>
-      </li>
-      <li class="log_out">
-        <a href="index.php?aksi=logout" onclick="return confirm('Apakah anda akan keluar?')">
-          <i class='bx bx-log-out'></i>
-          <span class="links_name">Log out</span>
-        </a>
-      </li>
-    </ul>
-  </div>
-  <section class="home-section">
-    <nav>
-      <div class="sidebar-button">
-        <i class='bx bx-menu sidebarBtn'></i>
-        <span class="dashboard">Dashboard</span>
-      </div>
-      <div class="profile-details">
-        <span class="admin_name"><?php echo $sesName; ?></span>
-      </div>
+
+    <!-- BOTTOM NAV -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-white sticky-top">
+        <div class="container">
+            <a class="navbar-brand" href="#">MoyoIsland<span class="dot"></span></a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#home">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#about">About</a>
+                    </li>
+                    <!-- <li class="nav-item">
+                        <a class="nav-link" href="#services">Services</a>
+                    </li> -->
+                    <!-- <li class="nav-item">
+                        <a class="nav-link" href="#portfolio">Portfolio</a>
+                    </li> -->
+                    <li class="nav-item">
+                        <a class="nav-link" href="#team">Team</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#reviews">Reseller</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#blog">produk</a>
+                    </li>
+                </ul>
+                <a href="index2.php" target="_blank" class="btn btn-brand ms-lg-3">Login</a>
+            </div>
+        </div>
     </nav>
 
-    <div class="home-content">
-      <div class="overview-boxes">
-        <div class="box">
-          <div class="right-side">
-            <div class="box-topic">Total Order</div>
-            <div class="number"><?php echo $jml_transaksi; ?></div>
-            <div class="indicator">
-              <i class='bx bx-left-arrow-alt right'></i>
-              <a href="transaksi.php" class="text">
-                See All
-              </a>
+    <!-- SLIDER -->
+    <div class="owl-carousel owl-theme hero-slider">
+        <div class="slide slide1">
+            <div class="container">
+                <div class="row">
+                    <div class="col-12 text-center text-white">
+                        <h6 class="text-white text-uppercase">moyo island</h6>
+                        <h1 class="display-3 my-4">Manjakan Mata Anda<br />Dengan Panorama yang indah</h1>
+                    </div>
+                </div>
             </div>
-          </div>
-          <i class='bx bx-cart-alt cart'></i>
         </div>
-        <div class="box">
-          <div class="right-side">
-            <div class="box-topic">Total Produk</div>
-            <div class="number"><?php echo $jml_barang; ?></div>
-            <div class="indicator">
-              <i class='bx bx-left-arrow-alt left'></i>
-              <a href="barang.php" class="text">
-                See All
-              </a>
+        <div class="slide slide2">
+            <div class="container">
+                <div class="row">
+                    <div class="col-12 col-lg-10 offset-lg-1 text-white">
+                        <h6 class="text-white text-uppercase">moyo island</h6>
+                        <h1 class="display-3 my-4">Selamat Datang Di<br />Desa Labuhan Aji</h1>
+                    </div>
+                </div>
             </div>
-          </div>
-          <i class='bx bx-box cart two'></i>
         </div>
-        <div class="box">
-          <div class="right-side">
-            <div class="box-topic">Total Mitra</div>
-            <div class="number"><?php echo $jml_mitra; ?></div>
-            <div class="indicator">
-              <i class='bx bx-left-arrow-alt up'></i>
-              <a href="mitra.php" class="text">
-                See All
-              </a>
-            </div>
-          </div>
-          <i class='bx bx-badge-check cart three'></i>
-        </div>
-        <div class="box">
-          <div class="right-side">
-            <div class="box-topic">Total Reseller</div>
-            <div class="number"><?php echo $jml_reseller; ?></div>
-            <div class="indicator">
-              <i class='bx bx-left-arrow-alt down'></i>
-              <a href="reseller.php" class="text">
-                See All
-              </a>
-            </div>
-          </div>
-          <i class='bx bxs-collection cart four'></i>
-        </div>
-      </div>
-
-      <style>
-        .my-box {
-          background-color: white;
-          padding: 1.4rem;
-          margin: 25px 20px;
-          border-radius: 16px;
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-          background-color: rgb(16, 37, 88, 0.25);
-          /* background-color: #FFF; */
-          box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
-        }
-
-        .group {
-          display: flex;
-          float: left;
-          align-items: center;
-        }
-
-        .icon-untung {
-          display: flex;
-          align-items: center;
-          font-size: 32px;
-          color: #355091;
-          margin-right: 6px;
-        }
-      </style>
-
-      <div class="my-box">
-        <div class="group">
-          <i class='bx bxs-badge-dollar ' style="color: #355091; font-size: 32px; margin-right: 6px;"></i>
-          <p style="font-size:17px; font-weight:500; ">Total Keuntungan Bulan ini :</p>
-        </div>
-        <h3>Rp <?= number_format($untung, 2, ',', '.') . ',-'; ?></h3>
-      </div>
-
-      <div class="sales-boxes">
-        <div class="recent-sales1 box">
-          <div class="card-header1">
-            <h3>Recent Transaksi</h3>
-
-            <button>
-              <a href="barangKeluar.php" style="text-decoration: none;">Detail</a>
-              <span class="bx bx-right-arrow-alt"></span>
-            </button>
-          </div>
-          <div class="card-body1">
-            <div class="table-responsive">
-              <table width="100%">
-                <thead>
-                  <tr>
-                    <th>No</th>
-                    <th>ID Transaksi</th>
-                    <th>Tanggal</th>
-                    <th>Penerima</th>
-                    <th>Alamat</th>
-                    <th>Total Harga</th>
-                    <th>Status</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <?php
-                  $brg = mysqli_query($koneksi, "SELECT * FROM transaksi ORDER BY id_transaksi DESC");
-                  $no = 1;
-                  while ($b = mysqli_fetch_array($brg)) {
-                    $idb = $b['id_transaksi'];
-                  ?>
-                    <tr>
-                      <td align="center"><?php echo $no; ?></td>
-                      <td><?php echo $b['id_transaksi'] ?></td>
-                      <td><?php $tanggals = $b['tgl_transaksi'];
-                          echo date("d-M-Y", strtotime($tanggals)) ?></td>
-                      <td><?php echo $b['penerima'] ?></td>
-                      <td><?php echo $b['alamat'] ?></td>
-                      <td><?php echo $b['total_transaksi'] ?></td>
-                      <td><?php echo $b['status'] ?></td>
-                    </tr>
-                  <?php
-                    $no++; //untuk nomor urut terus bertambah 1
-                  }
-                  ?>
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </div>
-      </div>
     </div>
-  </section>
 
-  <script>
-    let sidebar = document.querySelector(".sidebar");
-    let sidebarBtn = document.querySelector(".sidebarBtn");
-    sidebarBtn.onclick = function() {
-      sidebar.classList.toggle("active");
-      if (sidebar.classList.contains("active")) {
-        sidebarBtn.classList.replace("bx-menu", "bx-menu-alt-right");
-      } else
-        sidebarBtn.classList.replace("bx-menu-alt-right", "bx-menu");
-    }
-  </script>
+    <!-- ABOUT -->
+    <section id="about">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-lg-5 py-5">
+                    <div class="row">
 
+                        <div class="col-12">
+                            <div class="info-box">
+                                <img src="img/matajitu.png" alt="">
+                                <div class="ms-4">
+                                    <h5>Air Terjun Mata Jitu</h5>
+                                    <p>Nikmati Keseruan Anda Mandi Di Air Terjun Mata Jitu Bersama Keluarga,Teman,Ataupun Pasangan Anda.</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 mt-4">
+                            <div class="info-box">
+                                <img src="img/takatsegele.png" alt="">
+                                <div class="ms-4">
+                                    <h5>Takat Segele</h5>
+                                    <p>Jika Anda Yang Hobi Dengan Suasana Bawah Laut, Silahkan Datang Ke Takat Segele dan Anda Bisa Berenang,Snorkling,dll.</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 mt-4">
+                            <div class="info-box">
+                                <img src="img/batukapal.png" alt="">
+                                <div class="ms-4">
+                                    <h5>Batu Kapal</h5>
+                                    <p>Bagi Anda Yang Suka Sunset Ataupun Pemandangan Yang Indah, Batu kapal Lah solusinya.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-5">
+                    <img src="img/petamoyo.png" alt="">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- MILESTONE -->
+    <section id="milestone">
+        <div class="container">
+            <div class="row text-center justify-content-center gy-4">
+                <div class="col-lg-2 col-sm-6">
+                    <h1 class="display-4">80%</h1>
+                    <p class="mb-0">Wisata</p>
+                </div>
+                <div class="col-lg-2 col-sm-6">
+                    <h1 class="display-4">60%</h1>
+                    <p class="mb-0">Produk</p>
+                </div>
+                <div class="col-lg-2 col-sm-6">
+                    <h1 class="display-4">75%</h1>
+                    <p class="mb-0">Kuliner</p>
+                </div>
+                <div class="col-lg-2 col-sm-6">
+                    <h1 class="display-4">50%</h1>
+                    <p class="mb-0">Budaya</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- <section id="services" class="text-center">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <div class="intro">
+                        <h6>Our Services</h6>
+                        <h1>What We Do?</h1>
+                        <p class="mx-auto">Contrary to popular belief, Lorem Ipsum is not simply random text. It has
+                            roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old</p>
+                    </div>
+                </div>
+            </div>
+            <div class="row g-4">
+                <div class="col-lg-4 col-md-6">
+                    <div class="service">
+                        <img src="img/icon1.png" alt="">
+                        <h5>Digital Marketing</h5>
+                        <p>Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of
+                            classical Latin literature from</p>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6">
+                    <div class="service">
+                        <img src="img/icon2.png" alt="">
+                        <h5>Logo Designing</h5>
+                        <p>Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of
+                            classical Latin literature from</p>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6">
+                    <div class="service">
+                        <img src="img/icon3.png" alt="">
+                        <h5>Buisness consulting</h5>
+                        <p>Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of
+                            classical Latin literature from</p>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6">
+                    <div class="service">
+                        <img src="img/icon4.png" alt="">
+                        <h5>Videography</h5>
+                        <p>Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of
+                            classical Latin literature from</p>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6">
+                    <div class="service">
+                        <img src="img/icon5.png" alt="">
+                        <h5>Brand Identity</h5>
+                        <p>Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of
+                            classical Latin literature from</p>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6">
+                    <div class="service">
+                        <img src="img/icon6.png" alt="">
+                        <h5>Ethical Hacking</h5>
+                        <p>Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of
+                            classical Latin literature from</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section> -->
+
+    <!-- <section class="bg-light" id="portfolio">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <div class="intro">
+                        <h6>Work</h6>
+                        <h1>Successful projects</h1>
+                        <p class="mx-auto">Contrary to popular belief, Lorem Ipsum is not simply random text. It has
+                            roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="projects-slider" class="owl-theme owl-carousel">
+            <div class="project">
+                <div class="overlay"></div>
+                <img src="images/barang/<?= $produk['gambar']; ?>" alt="">
+                <div class="content">
+                    <h2><?= $produk['barang']?></h2>
+                    <h6><?= $produk['deskripsi']?></h6>
+                </div>
+            </div>
+            <div class="project">
+                <div class="overlay"></div>
+                <img src="img/project2.jpg" alt="">
+                <div class="content">
+                    <h2>Consulting Marketing</h2>
+                    <h6>Website Design</h6>
+                </div>
+            </div>
+            <div class="project">
+                <div class="overlay"></div>
+                <img src="img/project3.jpg" alt="">
+                <div class="content">
+                    <h2>Consulting Marketing</h2>
+                    <h6>Website Design</h6>
+                </div>
+            </div>
+            <div class="project">
+                <div class="overlay"></div>
+                <img src="img/project4.jpg" alt="">
+                <div class="content">
+                    <h2>Consulting Marketing</h2>
+                    <h6>Website Design</h6>
+                </div>
+            </div>
+            <div class="project">
+                <div class="overlay"></div>
+                <img src="img/project5.jpg" alt="">
+                <div class="content">
+                    <h2>Consulting Marketing</h2>
+                    <h6>Website Design</h6>
+                </div>
+            </div>
+        </div>
+        
+    </section> -->
+
+    <section id="team">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <div class="intro">
+                        <h6>Team</h6>
+                        <h1>Desa Labuhan Aji</h1>
+                        <p class="mx-auto">Terus Maju Untuk Membentuk Masyarakat Yang Dapat Memajukan Desa Dalam Bidang seni, budaya, digital, dan teknologi</p>
+                    </div>
+                </div>
+            </div>
+            <div class="row justify-content-center">
+                <div class="col-lg-4 col-md-8">
+                    <div class="team-member">
+                        <div class="image">
+                            <img src="img/kepala2.jpg" alt="">
+                            <div class="social-icons">
+                                <a href="#"><i class='bx bxl-facebook'></i></a>
+                                <a href="#"><i class='bx bxl-twitter'></i></a>
+                                <a href="#"><i class='bx bxl-instagram'></i></a>
+                                <a href="#"><i class='bx bxl-pinterest'></i></a>
+                            </div>
+                            <div class="overlay"></div>
+                        </div>
+
+                        <h5>Azlam Wahyudin</h5>
+                        <p>Frontend Developer</p>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-8">
+                    <div class="team-member">
+                        <div class="image">
+                            <img src="img/kepala1.jpg" alt="">
+                            <div class="social-icons">
+                                <a href="#"><i class='bx bxl-facebook'></i></a>
+                                <a href="#"><i class='bx bxl-twitter'></i></a>
+                                <a href="#"><i class='bx bxl-instagram'></i></a>
+                                <a href="#"><i class='bx bxl-pinterest'></i></a>
+                            </div>
+                            <div class="overlay"></div>
+                        </div>
+
+                        <h5>Syofyan</h5>
+                        <p>Kepala Desa</p>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-8">
+                    <div class="team-member">
+                        <div class="image">
+                            <img src="img/kepala_3.jpg" alt="">
+                            <div class="social-icons">
+                                <a href="#"><i class='bx bxl-facebook'></i></a>
+                                <a href="#"><i class='bx bxl-twitter'></i></a>
+                                <a href="#"><i class='bx bxl-instagram'></i></a>
+                                <a href="#"><i class='bx bxl-pinterest'></i></a>
+                            </div>
+                            <div class="overlay"></div>
+                        </div>
+
+                        <h5>Salahudin</h5>
+                        <p>Bendahara Desa</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="bg-light" id="reviews">
+
+        <div class="owl-theme owl-carousel reviews-slider container">
+            <?php
+        while ($rowRes = mysqli_fetch_assoc($resultReseller)) {
+            ?>
+            <div class="review">
+                <div class="person">
+                    <img src="images/undraw_profile_pic_ic-5-t.svg" alt="">
+                    <h5><?=$rowRes['nama_reseller']?></h5>
+                    <small><?=$rowRes['alamat']?></small>
+                </div>
+                <h3>Halo Nama Saya <?=$rowRes['nama_reseller']?>, saya berasal dari <?=$rowRes['alamat']?>. saya bergabung dengan desa labuhan aji pada tanggal <?php $tanggals = $rowRes['tgl_gabung'];echo date("d M Y", strtotime($tanggals)) ?></h3>
+                <div class="stars">
+                    <i class='bx bxs-star'></i>
+                    <i class='bx bxs-star'></i>
+                    <i class='bx bxs-star'></i>
+                    <i class='bx bxs-star'></i>
+                    <i class="bx bxs-star-half"></i>
+                </div>
+                <i class='bx bxs-quote-alt-left'></i>
+            </div>
+            <?php } ?>
+        </div>
+    </section>
+
+    <section id="blog">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <div class="intro">
+                        <h6>Produk</h6>
+                        <h1>PRODUK DESA</h1>
+                        <p class="mx-auto">Nikmati Berbelanja Murah Bersama Kami, di jamin Keutuhan Barang saat sampai ketempat anda
+                             dan keaslian barang yang Anda pesan di jamin memuaskan anda</p>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+            <?php
+            while ($row = mysqli_fetch_assoc($result)) {
+            ?>
+                <div class="col-md-4">
+                    <article class="blog-post">
+                        <img src="images/barang/<?= $row['gambar'] ?>" alt="" class="img-fluid">
+                        <a href="#" class="tag">Rp. <?= $row['hg_jual']?></a>
+                        <div class="content">
+                            <small><?= $row['tgl_masuk']?></small>
+                            <h5><?=$row['barang']?></h5>
+                            <p><?= $row['deskripsi']?></p>
+                        </div>
+                    </article>
+                </div>
+                <?php } ?> 
+                <!-- <div class="col-md-4">
+                    <article class="blog-post">
+                        <img src="img/project4.jpg" alt="">
+                        <a href="#" class="tag">Programming</a>
+                        <div class="content">
+                            <small>01 Dec, 2022</small>
+                            <h5>Web Design trends in 2022</h5>
+                            <p>Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a
+                                piece of classical Latin literature from</p>
+                        </div>
+                    </article>
+                </div>
+                <div class="col-md-4">
+                    <article class="blog-post">
+                        <img src="img/project2.jpg" alt="">
+                        <a href="#" class="tag">Marketing</a>
+                        <div class="content">
+                            <small>01 Dec, 2022</small>
+                            <h5>Web Design trends in 2022</h5>
+                            <p>Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a
+                                piece of classical Latin literature from</p>
+                        </div>
+                    </article>
+                </div> -->
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="footer-top text-center">
+            <div class="container">
+                <div class="row justify-content-center">
+                    <div class="col-lg-6 text-center">
+                        <h4 class="navbar-brand">MoyoIsland<span class="dot">.</span></h4>
+                        <p>hubungi No telpon paling Bawah Untuk melakukan proses pemesanan barang</p>
+                        <div class="col-auto social-icons">
+                            <a href="#"><i class='bx bxl-facebook'></i></a>
+                            <a href="#"><i class='bx bxl-twitter'></i></a>
+                            <a href="https://instagram.com/azlam_wahyudin" target="_blank"><i class='bx bxl-instagram'></i></a>
+                            <a href="#"><i class='bx bxl-pinterest'></i></a>
+                        </div>          
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom text-center">
+        <p> <i class='bx bxs-phone-call'></i>085237232541</p>
+        </div>
+    </footer>
+
+
+    <!-- Modal -->
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-xl">
+            <div class="modal-content">
+                <div class="modal-body p-0">
+                    <div class="container-fluid">
+                        <div class="row gy-4">
+                            <div class="col-lg-4 col-sm-12 bg-cover"
+                                style="background-image: url(img/c2.jpg); min-height:300px;">
+                                <div>
+                                    
+                                </div>
+                            </div>
+                            <div class="col-lg-8">
+                                <form class="p-lg-5 col-12 row g-3">
+                                    <div>
+                                        <h1>Get in touch</h1>
+                                    <p>Fell free to contact us and we will get back to you as soon as possible</p>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <label for="userName" class="form-label">First name</label>
+                                        <input type="text" class="form-control" placeholder="Jon" id="userName"
+                                            aria-describedby="emailHelp">
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <label for="userName" class="form-label">Last name</label>
+                                        <input type="text" class="form-control" placeholder="Doe" id="userName"
+                                            aria-describedby="emailHelp">
+                                    </div>
+                                    <div class="col-12">
+                                        <label for="userName" class="form-label">Email address</label>
+                                        <input type="email" class="form-control" placeholder="Johndoe@example.com" id="userName"
+                                            aria-describedby="emailHelp">
+                                    </div>
+                                    <div class="col-12">
+                                        <label for="exampleInputEmail1" class="form-label">Enter Message</label>
+                                        <textarea name="" placeholder="This is looking great and nice." class="form-control" id=""  rows="4"></textarea>
+                                    </div>
+
+                                    <div class="col-12">
+                                        <button type="submit" class="btn btn-brand">Send Message</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+
+
+
+
+    <script src="js/jquery.min.js"></script>
+    <script src="js/bootstrap.bundle.min.js"></script>
+    <script src="js/owl.carousel.min.js"></script>
+    <script src="js/app.js"></script>
 </body>
 
 </html>

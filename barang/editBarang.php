@@ -64,8 +64,8 @@ if (isset($_GET['id_brg'])) {
 <body>
     <div class="sidebar">
         <div class="logo-details">
-            <i class='bx bx-analyse'></i>
-            <span class="logo_name">Bumdes.KM</span>
+        <img src="../assets/img/bumdeslogo.png" alt="bumdes" width="40" >
+            <span class="logo_name">BUMDES</span>
         </div>
         <ul class="nav-links">
             <li>
@@ -187,7 +187,7 @@ if (isset($_GET['id_brg'])) {
                                 </div>
                                 <div>
                                     <label for="jml_stok">Stok Product</label>
-                                    <input type="number" name="jml_stok" id="jml_stok" value="<?php echo $data['jml_stok']; ?>" autofocus="" required="" disabled />
+                                    <input type="number" name="jml_stok" id="jml_stok" value="<?php echo $data['jml_stok']; ?>" autofocus="" required=""/>
                                 </div>
                                 <div>
                                     <label for="deskripsi">Deskripsi</label>

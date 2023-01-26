@@ -64,8 +64,8 @@ if (isset($_GET['id'])) {
 <body>
     <div class="sidebar">
         <div class="logo-details">
-            <i class='bx bx-analyse'></i>
-            <span class="logo_name">Bumdes.KM</span>
+        <img src="../assets/img/bumdeslogo.png" alt="bumdes" width="40" >
+            <span class="logo_name">BUMDES</span>
         </div>
         <ul class="nav-links">
             <li>

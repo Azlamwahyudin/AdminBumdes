@@ -46,7 +46,7 @@ $sesName = $_SESSION['name'];
         </div>
         <ul class="nav-links">
             <li>
-                <a href="index.php" class="">
+                <a href="index2.php" class="">
                     <i class='bx bx-grid-alt'></i>
                     <span class="links_name">Dashboard</span>
                 </a>

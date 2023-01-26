@@ -47,7 +47,7 @@ $sesName = $_SESSION['name'];
         </div>
         <ul class="nav-links">
             <li>
-                <a href="index.php" class="">
+                <a href="index2.php" class="">
                     <i class='bx bx-grid-alt'></i>
                     <span class="links_name">Dashboard</span>
                 </a>
@@ -162,6 +162,7 @@ $sesName = $_SESSION['name'];
                                     while ($row = mysqli_fetch_assoc($result)) {
                                     ?>
                                         <tr>
+                                            
                                             <td align="center"><?php echo $no; ?></td>
                                             <td><?php echo $row['id_brg']; ?></td>
                                             <td><?php echo $row['barang']; ?></td>
@@ -170,7 +171,7 @@ $sesName = $_SESSION['name'];
                                             <td style="text-align: center;"><img src="images/barang/<?php echo $row['gambar']; ?>" style="width: 120px;"></td>
                                             <td>
                                                 <a href="barang/editBarang.php?id_brg=<?php echo $row['id_brg']; ?>" class="btn-edit"><i class='bx bxs-edit'></i></a>
-                                                <a href="barang/proses_hapus.php?id_brg=<?php echo $row['id_brg']; ?> &gambar=<?php echo $row['gambar']; ?>" class="btn-hapus" onclick="return confirm('Anda yakin akan menghapus data ini?')" ><i class='bx bx-trash'></i></a>
+                                                <a href="barang/proses_hapus.php?id_brg=<?php echo $row['id_brg']; ?>&gambar=<?php echo $row['gambar']; ?>" class="btn-hapus" onclick="return confirm('Anda yakin akan menghapus data ini?')" ><i class='bx bx-trash'></i></a>
                                             </td>
                                         </tr>
                                     <?php

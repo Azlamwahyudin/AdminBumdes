@@ -61,7 +61,7 @@ $tanggal_masuk = date("Y-m-d");
 <body>
     <div class="sidebar">
         <div class="logo-details">
-            <i class='bx bx-analyse'></i>
+        <img src="../assets/img/bumdeslogo.png" alt="bumdes" width="40" >
             <span class="logo_name">BUMDES</span>
         </div>
         <ul class="nav-links">
